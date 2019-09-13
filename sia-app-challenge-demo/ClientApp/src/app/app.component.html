@@ -1,0 +1,53 @@
+<div style="">
+  <nav class="animate animated fadeInDown navbar navbar-fixed-top navbar-expand-lg navbar-dark" style="background-color:#0c0032; z-index:2; padding-top:10px; padding-bottom:10px; position:fixed; width:100%">
+    <a class="navbar-brand" style='color:#fff; letter-spacing:2px'>
+      <img src="assets/images/logo.png" width="25" height="25" alt="" style="margin-right:10px; margin-bottom:3px">
+      SmartArk SIA Demo
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+      <div class="navbar-nav"></div>
+      <ul class="nav navbar-na ml-auto" style='color:#fff; font-size:15px'>
+         <i class="fa fa-user-circle" style="cursor:pointer; font-size:25px"></i> &nbsp; Goh Choon Phong
+      </ul>
+    </div>
+  </nav>
+
+
+  <div class="sidenav animate animated fadeInRight">
+
+    <div style=''>
+      <button class="btn btn-block btn-dark sidenav-menu-btn" [routerLink]="['']" [style.background-color]="this.router.url == '/' ? '#000' : ''"><h6 style='margin-top:6px'>Overview</h6></button>
+      <button class="btn btn-block btn-dark sidenav-menu-btn" [routerLink]="['/twin']" [style.background-color]="this.router.url.includes('/twin') ? '#000' : ''"><h6 style='margin-top:6px'>Digital Twin</h6></button>
+      <button class="btn btn-block btn-dark sidenav-menu-btn" [routerLink]="['/pinboard']" [style.background-color]="this.router.url == '/pinboard' ? '#000' : ''"><h6 style='margin-top:6px'>Pinboards</h6></button>
+      <!-- <button class="btn btn-block btn-dark sidenav-menu-btn" [routerLink]="['/inventory']" [style.background-color]="this.router.url == '/inventory' ? '#000' : ''"><h6 style='margin-top:6px'>Inventory</h6></button> -->
+
+    </div>
+
+    <div class="" style="position:absolute; bottom:5%; width:100%">
+
+      <div class='form-group' style='padding-left:25px; padding-right:25px'>
+        <label for='selectPlaneType' style='color:#fff; font-size:12px;'>Aircraft Type</label>
+        <select id='selectPlaneType' type='text' class='form-control' style='border:0'>
+          <option>Boeing 787</option>
+          <option>Airbus A380</option>
+        </select>
+        <label for='selectRegNo' style='margin-top:10px; color:#fff; font-size:12px'>Registration No.</label>
+        <select id='selectRegNo' type='text' class='form-control' style='border:0'>
+          <option>SMT203</option>
+        </select>
+        <br/>
+        <button class="btn btn-primary btn-sm btn-block btn-dark sidenav-select-btn " style="text-align:center;">Change</button>
+      </div>
+
+    </div>
+  </div>
+
+    <particles *ngIf="!this.router.url.includes('/twin/')" [params]="myParams" [style]="myStyle" [width]="width" [height]="height" style="position:absolute; z-index:-1"></particles>
+
+  <div style=''>
+    <router-outlet></router-outlet>
+  </div>
+</div>

@@ -1,0 +1,56 @@
+h1,h2,h3,h4,h5,h6 {
+  color:#f69f31 !important;
+}
+
+select {
+  border:0;
+  font-size:13px;
+}
+
+agm-map {
+  height: 20em;
+  width: auto;
+}
+
+.nav-link {
+  color:#fff;
+}
+
+label {
+  color:#fff;
+  font-size:12px;
+}
+
+.nav-pills .nav-link.active, .nav-pills .show>.nav-link {
+  background-color: #f69f31;
+  color: #000;
+  border-radius:0
+}
+
+.card {
+  border:0;
+  border-radius: 10px;
+  background-color: #323232;
+  box-shadow: 0px -3px 0px 0px #f69f31;
+  opacity:0.9;
+}
+
+.card-header {
+  border:0;
+  background-color:#323232;
+  border-bottom-left-radius: 10px !important;
+  border-bottom-right-radius: 10px !important;
+  cursor:pointer;
+}
+
+p,h5,h6 .card {
+  color:#fff;
+}
+
+tr {
+  /* cursor:pointer; */
+}
+
+tbody tr:hover {
+  background-color:rgba(255,255,255,0.1);
+}

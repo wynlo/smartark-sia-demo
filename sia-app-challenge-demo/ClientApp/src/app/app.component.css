@@ -1,0 +1,109 @@
+.btn-sm {
+  box-shadow: 0px 2px 0px 0px rgba(70,70,70,1);
+}
+
+.navbar {
+  box-shadow: 0px 2px 2px 2px rgba(0,0,0,0.3);
+}
+
+/* The sidebar menu */
+.sidenav {
+  height: 100%; /* Full-height: remove this if you want "auto" height */
+  width: 20%; /* Set the width of the sidebar */
+  position: fixed; /* Fixed Sidebar (stay in place on scroll) */
+  z-index: 1; /* Stay on top */
+  /* top: 0%; /* Stay at the top */
+  padding-top:3.625em;
+  right: 0;
+  background-color: #323232;
+  overflow-x: hidden; /* Disable horizontal scroll */
+  box-shadow: -1px 0px 2px 2px rgba(30,30,30,.3);
+}
+
+
+
+.sidenav .btn {
+  border-radius:0px;
+  border:0;
+  background-color: #202020;
+  text-align:right;
+  margin-top: 3.5px;
+  box-shadow: 0px 2px 1px 1px rgba(0,0,0,0.7);
+}
+
+.sidenav-menu-btn {
+  padding-top:20px;
+  padding-bottom:20px;
+}
+
+.sidenav .btn .btn-dark .sidenav-select-btn {
+  padding-top:0px;
+  padding-bottom:0px;
+}
+
+.sidenav .btn:hover {
+  background-color: #f69f31;
+  color: #323232;
+}
+
+.sidenav .btn:focus {
+  color: #fff;
+}
+
+/* Style page content */
+.main {
+  margin-left: 160px; /* Same as the width of the sidebar */
+  padding: 0px 10px;
+}
+
+/* On smaller screens, where height is less than 450px, change the style of the sidebar (less padding and a smaller font size) */
+@media screen and (max-height: 450px) {
+  .sidenav {padding-top: 15px;}
+  .sidenav a {font-size: 18px;}
+}
+
+.alert {
+  border:0;
+}
+
+
+.node-content-wrapper, .tree-children {
+  position: relative;
+}
+
+.node-content-wrapper::before, .tree-children::after {
+  content: "";
+  position: absolute;
+}
+
+.node-content-wrapper::before {
+  border-bottom: 1px solid lightgrey;
+  border-left: 1px solid lightgrey;
+  height: 28px;
+  top: -17px;
+  width: 20px;
+  left: -28px;
+}
+
+.tree-node-level-1 > tree-node-wrapper > .node-wrapper > .node-content-wrapper::before {
+  display: none;
+}
+
+.tree-node-leaf > .node-wrapper > .node-content-wrapper::before {
+  width: 25px;
+}
+
+.tree-children::after {
+  border-left: 1px solid lightgrey;
+  height: 100%;
+  top: -15px;
+  left: -15px;
+}
+
+tree-node:last-child > .tree-node > .tree-children::after {
+  border-left: none;
+}
+
+.toggle-children {
+  z-index: 1;
+}

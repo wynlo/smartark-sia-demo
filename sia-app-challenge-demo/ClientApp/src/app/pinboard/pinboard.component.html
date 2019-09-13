@@ -1,0 +1,359 @@
+
+<div id="glFullscreen" class="nice-scroll" style="width:78%; height:100%;">
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-light animate animated fadeInDown"  style="position:fixed; width:80%; z-index:1">
+
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav" style="color:#282828 !important">
+          <li class="nav-item dropdown" >
+            <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color:#0c0032 !important; cursor:pointer">
+              Create...
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <button class="dropdown-item"  data-toggle="modal" data-target="#exampleModal3" style="letter-spacing:1px;">Pin <i class="fa fa fa-thumb-tack"></i></button>
+              <button class="dropdown-item"  data-toggle="modal" data-target="#exampleModal4" style="letter-spacing:1px;">New Board <i class="fa fa fa-th"></i></button>
+              <div class="dropdown-divider"></div>
+              <button class="dropdown-item" style="letter-spacing:1px;">Scan an Existing Record <i class="fa fa-camera"></i></button>
+            </div>
+
+
+          </li>
+          <li class="nav-item dropdown" >
+            <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color:#0c0032 !important; cursor:pointer">
+              {{ this._pinboardService.currentBoard.type }} ({{ this._pinboardService.currentBoard.startdatetime }})
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+	      <button class="dropdown-item" style="font-size:15px; letter-spacing: 1px" data-toggle="modal" data-target="#exampleModal2">View All Boards</button>
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item" style="font-size:15px"><strong>Recent Boards</strong></a>
+              <button *ngFor="let board of this._pinboardService.boards | slice:0:3; let i=index" class="dropdown-item" style="font-size:12px; letter-spacing:1px" >
+                {{ board.id }}. {{ board.type }} ({{ board.startdatetime }})
+              </button>
+            </div>
+          </li>
+          <li class="nav-item" >
+            <a class="nav-link" style="color:#0c0032 !important; cursor:pointer">
+              <i class="fa fa-info-circle" data-toggle="modal" data-target="#exampleModal6" style="font-size:20px"></i>
+            </a>
+          </li>
+
+
+        </ul>
+
+
+        <ul class="nav navbar-na ml-auto" style='color:#fff;'>
+
+
+        </ul>
+      </div>
+    </nav>
+
+    <div class="card animate animated fadeIn" style="margin-top:5em; margin-left:20px; border:0; border-radius: 8px; background-color: rgba(255,255,255,0.05);">
+      <div class="card-body" style="padding-top:0; height:70vh; overflow:auto; ">
+        <div class="card-body" style="margin-top:0px">
+          <table class="table table-borderless" style="color:#fff; font-size:12px; border-color:rgba(0,0,0,0); background-color: rgba(0,0,0,0); ">
+            <tbody>
+              <tr *ngFor="let group of this._pinboardService.pins | keyvalue">
+                <th class="th-card-pin" (click)="OnInventoryOpen(group.key)" data-toggle="modal" data-target="#exampleModal5" style="cursor:pointer">
+                  {{ group.key | titlecase }} <br/>
+                  <i class="fa fas fa-archive" style="font-size:22px; padding-top:10px;"></i>
+                </th>
+                  <td class="td-card-pin" *ngFor="let pin of group.value">
+                    <!-- Mini Card Pin Starts Here -->
+                    <div class="card card-pin" data-toggle="modal" data-target="#exampleModal" (click)="OnPinOpen(pin.id)">
+                      <div class="card-body">
+                        <h6 class="card-title"><i class="fa fa-thumb-tack" style="transform: rotate(-45deg);" [style.color]="pin.severity"></i> {{ pin.id }}</h6>
+                        <p>{{pin.title}} on {{pin.component | titlecase}}</p>
+                        <p style="font-size:10px">{{pin.datetime}}</p>
+                        <p><i class="fa fa-user-circle"></i> {{pin.user}}</p>
+                      </div>
+                    </div>
+                    <!-- Mini Card Pin Ends Here -->
+                  </td>
+              </tr>
+
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+</div>
+
+<!-- =================================================================================================================================================================================================== -->
+<!-- =================================================================================================================================================================================================== -->
+
+<!-- Modal for Individual Pin -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModal" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document" >
+    <div *ngIf="this._pinboardService.openPin" class="modal-content modal-card-pin"  style="border:0; border-radius:0px; width:40em; height:26em;">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalCenterTitle"><i class="fa fa-thumb-tack" style="transform: rotate(-45deg);" [style.color]="this._pinboardService.openPin.severity"></i>&nbsp; {{ this._pinboardService.openPin.id }}</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" style="padding:2.5em;  overflow-y:scroll">
+
+        <form style="font-size:12px">
+            <div class="form-group">
+              <label>Title</label>
+              <input type="text" class="form-control" value="{{this._pinboardService.openPin.title}}" id="title" required>
+            </div>
+
+            <div class="form-group">
+              <label>Part</label>
+              <select class="form-control">
+                <option *ngFor="let part of this._partRetrievalService.currentParts">{{ part | titlecase }}</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label>Component</label>
+              <select class="form-control">
+                <option *ngFor="let component of this._partRetrievalService.currentComponents">{{ component | titlecase }}</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label>Description</label>
+              <textarea class="form-control" value="{{this._pinboardService.openPin.content}}" id="part"></textarea>
+            </div>
+
+            <div class="form-group">
+              <label>Actions Taken</label>
+              <textarea class="form-control" value="{{this._pinboardService.openPin.actions}}" id="part"></textarea>
+            </div>
+
+            <div class="form-group">
+              <label>Inventory Expended</label>
+              <div >
+                <table class="table borderless">
+                <tr *ngFor="let item_used of this._pinboardService.openPin.items_used | keyvalue">
+                <td>{{ item_used.key }}</td> <td>{{ item_used.value }}</td>
+                </tr>
+                </table>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label>Severity</label>
+              <select class="form-control">
+                <option *ngFor="let severity of this._pinboardService.severityList">{{ severity | titlecase }}</option>
+              </select>
+            </div>
+
+          <div class="row" style="padding-left:1em; padding-right:1em">
+            <p class="col-6" style="font-size:10px; margin-top:10px;"><i class="fa fa-user-circle"></i> Pinned by {{this._pinboardService.openPin.user}}</p>
+            <button type="button" class="col-6 btn btn-primary btn-sm" style="background-color:#202020; border:0; border-radius:0px; box-shadow: 0px 2px 1px 1px rgba(0,0,0,1);">Save changes</button>
+          </div>
+
+        </form>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+
+
+<!-- Modal for View Boards -->
+<div class="modal fade" id="exampleModal2" tabindex="-1" role="dialog" aria-labelledby="exampleModal2" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document" >
+      <div class="modal-content modal-view"  style="border:0; border-radius:0px; width:40em; height:26em;">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalCenterTitle"><i class="fa fa fa-th"></i> &nbsp; Your Boards</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body" style="overflow-y:scroll">
+          <table class="table table-border" style="font-size:12px">
+              <tr>
+                <th>Board ID</th><th>Type</th><th>Date Created</th><th>No. of Pins</th><th></th>
+              </tr>
+              <tr class="tr-view" *ngFor="let board of _pinboardService.boards">
+                <td>{{ board.id }}</td>
+                <td>{{ board.type }}</td>
+                <td>{{ board.startdatetime }}</td>
+                <td>{{ board.pins }}</td>
+                <td style="cursor:pointer"><i class="fa fa fa-th"></i></td>
+              </tr>
+          </table>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Modal for Create Pin -->
+<div class="modal fade" id="exampleModal3" tabindex="-1" role="dialog" aria-labelledby="exampleModal3" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document" >
+    <div class="modal-content modal-card-pin"  style="border:0; border-radius:0px; width:40em; height:30em;">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalCenterTitle"><i class="fa fa-thumb-tack" style="transform: rotate(-45deg);"></i>&nbsp; Create Pin</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" style="padding:2.5em;  overflow-y:scroll">
+
+        <form style="font-size:12px">
+            <div class="form-group">
+              <label>Title</label>
+              <input type="text" class="form-control" id="title" required>
+            </div>
+
+            <div class="form-group">
+              <label>Part</label>
+              <select class="form-control">
+                <option *ngFor="let part of this._partRetrievalService.currentParts">{{ part | titlecase }}</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label>Component</label>
+              <select class="form-control">
+                <!-- <option *ngFor="let component of this._partRetrievalService.currentComponents">{{ component | titlecase }}</option> -->
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label>Description</label>
+              <textarea class="form-control" id="part"></textarea>
+            </div>
+
+            <div class="form-group">
+              <label>Actions Taken</label>
+              <textarea class="form-control" id="part"></textarea>
+            </div>
+
+            <div class="form-group">
+              <label>Inventory Expended</label>
+              <div >
+                <table class="table borderless">
+                  <tr>
+                    <td style="padding-top:18px">a</td><td><input type="number" class="form-control" placeholder="Quantity Used"></td>
+                  </tr>
+                  <tr>
+                    <td style="padding-top:18px">b</td><td><input type="number" class="form-control" placeholder="Quantity Used"></td>
+                  </tr>
+                  <tr>
+                    <td style="padding-top:18px">c</td><td><input type="number" class="form-control" placeholder="Quantity Used"></td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label>Severity</label>
+              <select class="form-control">
+                <option *ngFor="let severity of this._pinboardService.severityList">{{ severity | titlecase }}</option>
+              </select>
+            </div>
+
+          <div class="row" style="padding-left:1em; padding-right:1em">
+            <p class="col-6" style="font-size:10px; margin-top:10px;"><i class="fa fa-user-circle"></i> Pinned by You</p>
+            <button type="button" class="col-6 btn btn-primary btn-sm" style="background-color:#202020; border:0; border-radius:0px; box-shadow: 0px 2px 1px 1px rgba(0,0,0,1);">Pin!</button>
+          </div>
+
+        </form>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+<!-- Modal for Create Board -->
+<div class="modal fade" id="exampleModal4" tabindex="-1" role="dialog" aria-labelledby="exampleModal4" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document" >
+      <div class="modal-content modal-view"  style="border:0; border-radius:0px; width:40em; height:17em;">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalCenterTitle"><i class="fa fa fa-th"></i> &nbsp; Create New Board</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body" style="overflow-y:scroll">
+
+          <form style="font-size:12px">
+
+              <div class="form-group">
+                <label>Maintenance Type</label>
+                <select class="form-control">
+                  <option>Line Check</option>
+                  <option>A</option>
+                  <option>C</option>
+                  <option>D</option>
+                </select>
+              </div>
+
+              <button type="button" class="btn btn-primary btn-block" style="background-color:#202020; border:0; border-radius:0px; box-shadow: 0px 2px 1px 1px rgba(0,0,0,1); margin-top:2.5em">Create Board!</button>
+
+          </form>
+
+
+        </div>
+    </div>
+  </div>
+</div>
+
+
+
+<!-- Modal for View Inventory -->
+<div class="modal fade" id="exampleModal5" tabindex="-1" role="dialog" aria-labelledby="exampleModal5" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document" >
+      <div class="modal-content modal-view"  style="border:0; border-radius:0px; width:40em; height:26em;">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalCenterTitle"><i class="fa fas fa-archive"></i> &nbsp; Inventory for {{ this._inventoryService.partSelectedName | titlecase }}</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body" style="overflow-y:auto; margin:20px">
+            <select class="form-control" style="font-size:14px" (change)="InventoryDropdownChange($event)">
+              <option selected></option>
+              <option *ngFor="let group of this._inventoryService.inventorySelectedByPart | keyvalue" [value]="group.key">
+                {{ group.key }}
+              </option>
+            </select>
+            <table class="table table-border" *ngIf="this._inventoryService.inventorySelectedByComponent" style="font-size:12px">
+            <tr>
+              <th>Item</th><th>Quantity</th>
+            </tr>
+            <tr *ngFor="let itemgroup of this._inventoryService.inventorySelectedByComponent | keyvalue">
+              <td>{{ itemgroup.key }}</td><td>{{ itemgroup.value }}</td>
+            </tr>
+            </table>
+        </div>
+    </div>
+  </div>
+</div>
+
+
+
+<!-- Modal for View Board Stats -->
+<div class="modal fade" id="exampleModal6" tabindex="-1" role="dialog" aria-labelledby="exampleModal6" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document" >
+      <div class="modal-content modal-view"  style="border:0; border-radius:0px; width:40em; height:26em;">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalCenterTitle"><i class="fa fas fa-info-circle"></i> &nbsp; Board Details</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body" style="overflow-y:scroll; text-align:center;">
+          <div style="padding:20px">
+            <h6>Pin Distribution</h6>
+            <plotly-plot [data]="graph.data" [layout]="graph.layout" [config]="graph.config"></plotly-plot>
+          </div>
+        </div>
+    </div>
+  </div>
+</div>

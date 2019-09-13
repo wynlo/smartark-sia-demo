@@ -1,0 +1,319 @@
+
+<div>
+<div id="glFullscreen" style="width:100%; height:100%; background-color:#282828">
+
+  <div class="animate animated zoomIn" style="left: 30%; top: 50%; position:absolute; text-align:center;"
+       [ngStyle]="this.loaded ? {'display': 'none'} : {}">
+       <div class="spinner-border text-warning" role="status" style="margin-bottom:15px">
+      </div>
+       <h6 style='color:#fff'>Building Component...</h6>
+
+  </div>
+
+  <nav class="navbar navbar-expand-lg navbar-light bg-light animate animated fadeInDown" [ngStyle]="this.loaded ? {} : {'display': 'none'}">
+
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav" style="color:#282828 !important">
+
+          <a class="nav-link" [routerLink]="['/twin']">
+            <i class="fa fa-angle-double-left"></i> &nbsp;Back
+          </a>
+
+          <a *ngIf="this.componentSelected != 'None'" class="nav-link" style='color:#0c0032'>
+            Turbofan <b>({{ displayComponentSelected | titlecase }})</b>
+          </a>
+
+      </ul>
+      <ul class="nav navbar-na ml-auto" style='color:#fff;' >
+
+          <button *ngIf="this.highlightGroup && this.showTwin"  data-toggle="modal" data-target="#modalManual" class="btn btn-toolbar" style="border-radius:4px; border:0;" (click)="toggleManual($event)">
+            <i id="manualBtn" class="fa fa-file-text" style="color:#0c0032"></i>
+          </button>
+
+          <button *ngIf="this.showManual" class="btn btn-toolbar" style="border-radius:4px; border:0;" (click)="toggleManual($event)">
+            <i id="manualClose" class="fa fa-times" style="color:#0c0032"></i>
+          </button>
+
+
+          <button *ngIf="this.highlightGroup && this.showTwin"  data-toggle="modal" data-target="#modalVideo" id="videoBtn" class="btn btn-toolbar" style="border-radius:4px; margin-left:15px;">
+            <i id="videoBtn" class="fa fa-play" style="color:#0c0032"></i>
+          </button>
+
+          <button *ngIf="this.highlightGroup && this.showTwin" data-toggle="modal" data-target="#modalCreatePin" class="btn btn-toolbar" style="border-radius:4px; margin-left:10px; " (click)="this.isScanningLogbook = false">
+            <i class="fa fas fa-thumb-tack" style="color:#0c0032"></i>
+          </button>
+
+          <button *ngIf="this.highlightGroup && this.showTwin" data-toggle="modal" data-target="#modalComponentPinboard" class="btn btn-toolbar" style="border-radius:4px; margin-left:10px;" (click)="retrievePinsForComponent($event)">
+            <i class="fa fas fa-th" style="color:#0c0032"></i>
+          </button>
+
+          <button *ngIf="this.highlightGroup && this.showTwin" data-toggle="modal" data-target="#modalViewInventory" class="btn btn-toolbar" style="border-radius:4px; margin-left:10px; " (click)="retrieveInventoryForComponent($event)">
+            <i class="fa fas fa-archive" style="color:#0c0032"></i>
+          </button>
+
+      </ul>
+    </div>
+</nav>
+
+<!-- <div class="row" style="width:80%" [ngStyle]="this.loaded ? {} : {'display': 'none'}"> -->
+
+  <div id="rendererContainer" style="width: 80%; height:100% background-color:#282828; position:static" [ngStyle]="this.loaded && this.showTwin ? {} : {'display': 'none'}" align="left" #rendererContainer>
+  </div>
+
+  <div class="card animate animated fadeInLeft" style="z-index:10; background-color:rgba(255,255,255,0.1) !important; border-radius:0px; position:absolute; max-width:20%; max-height:50%; top:7.5em; overflow-y:scroll" [ngStyle]="this.loaded && this.showTwin ? {} : {'display': 'none'}">
+    <div class="card-body" style="font-size:11px; color:#fff">
+      <tree-root [nodes]="nodes" [options]="options"></tree-root>
+    </div>
+  </div>
+
+
+
+  <div class="animate animated fadeIn" style="width:75%; position:static; margin-top:5em; margin-left:2em" [ngStyle]="this.loaded && this.showManual ? {} : {'display': 'none'}" >
+    <ngx-extended-pdf-viewer
+      id="pdf-viewer"
+      delayFirstView=500
+      [rotation]=0
+      [zoom]=50
+      [src]="'../../assets/pdf/MOCK_TURBOFAN_MANUAL.pdf'"
+      [showOpenFileButton]="false"
+      [showDownloadButton]="false"
+      [showRotateButton]="false"
+      [showSecondaryToolbarButton]="false"
+      [showPrintButton]="false"
+      [showBookmarkButton]="false"
+      [handTool]="false"
+      useBrowserLocale="true"
+      height="29.5em"
+    >
+    </ngx-extended-pdf-viewer>
+  </div>
+
+
+<!-- </div> -->
+
+
+
+</div>
+
+
+
+
+
+
+<!-- Modal for Video -->
+<div class="modal fade" id="modalVideo" tabindex="-1" role="dialog" aria-labelledby="modalVideo" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document" >
+      <div class="modal-content modal-view"  style="border:0; border-radius:0px;">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalCenterTitle"><i class="fa fa-play"></i> &nbsp; Video Manual for {{ displayComponentSelected | titlecase }}</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div *ngIf="this.modalVideo && this.modalVideo.style.display != 'none'" class="modal-body" style="overflow-y:scroll; text-align:center;">
+          <iframe width="430" height="315" src="https://www.youtube.com/embed/JxkJ-FwFeVI" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Modal for Create Pin Method  -->
+<div class="modal fade" id="modalCreatePin" tabindex="-1" role="dialog" aria-labelledby="modalCreatePin" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document" >
+      <div class="modal-content modal-view"  style="border:0; border-radius:0px;">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalCenterTitle"><i class="fa fa-thumb-tack" style="transform: rotate(-45deg);" ></i>&nbsp; Create Pin for {{ displayComponentSelected | titlecase }}</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+          <div class="modal-body" style="text-align:center;">
+            <button type="button" class="btn btn-primary btn-block" data-dismiss="modal" aria-label="Close" data-toggle="modal" style="background-color:#202020; border:0; border-radius:0px; box-shadow: 0px 2px 1px 1px rgba(0,0,0,1);" data-target="#modalCreatePinScan" >
+              Scan Logbook
+              <i class="fa fa-camera"></i>
+            </button>
+            <br/>
+            <button type="button" class="btn btn-primary btn-block" data-dismiss="modal" aria-label="Close" data-toggle="modal" style="background-color:#202020; border:0; border-radius:0px; box-shadow: 0px 2px 1px 1px rgba(0,0,0,1);" data-target="#modalCreatePinReg" >
+              Type Manually
+              <i class="fa fa-pencil"></i>
+            </button>
+          </div>
+
+      </div>
+  </div>
+</div>
+
+
+<!-- Modal for Create Pin Reg -->
+<div class="modal fade" id="modalCreatePinReg" tabindex="-1" role="dialog" aria-labelledby="modalCreatePinReg" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document" >
+    <div class="modal-content modal-card-pin" id="modalCreatePinScroll" style="border:0; border-radius:0px; width:40em; height:26em;">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalCenterTitle"><i class="fa fa-thumb-tack" style="transform: rotate(-45deg);" ></i>&nbsp; Create Pin for {{ displayComponentSelected | titlecase }}</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" style="padding:2.5em;  overflow-y:scroll">
+
+        <form style="font-size:12px">
+            <div class="form-group">
+              <label>Title</label>
+              <input type="text" class="form-control" id="title" required>
+            </div>
+
+            <div class="form-group">
+              <label>Description</label>
+              <textarea class="form-control" id="part"></textarea>
+            </div>
+
+            <div class="form-group">
+              <label>Actions Taken</label>
+              <textarea class="form-control" id="part"></textarea>
+            </div>
+
+            <div class="form-group">
+              <label>Inventory Expended</label>
+              <div >
+                <table class="table borderless" style="font-size:12px !important">
+                  <tr>
+                    <td style="padding-top:18px">a</td><td><input style="font-size:12px !important" type="number" class="form-control" placeholder="Quantity Used"></td>
+                  </tr>
+                  <tr>
+                    <td style="padding-top:18px">b</td><td><input style="font-size:12px !important" type="number" class="form-control" placeholder="Quantity Used"></td>
+                  </tr>
+                  <tr>
+                    <td style="padding-top:18px">c</td><td><input style="font-size:12px !important" type="number" class="form-control" placeholder="Quantity Used"></td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+
+
+            <div class="form-group">
+              <label>Severity</label>
+              <select class="form-control" style="font-size:12px !important" >
+                <option *ngFor="let severity of this._pinboardService.severityList" style="font-size:12px !important"  [style.color]="severity">{{ severity | titlecase }}</option>
+              </select>
+            </div>
+
+          <div class="row" style="padding-left:1em; padding-right:1em">
+            <p class="col-6" style="font-size:10px; margin-top:10px;"><i class="fa fa-user-circle"></i> Pinned by You</p>
+            <button type="button" class="col-6 btn btn-primary btn-sm" style="background-color:#202020; border:0; border-radius:0px; box-shadow: 0px 2px 1px 1px rgba(0,0,0,1);">Pin!</button>
+          </div>
+
+        </form>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+<!-- Modal for Create Pin Method Scan -->
+<div class="modal fade" id="modalCreatePinScan" tabindex="-1" role="dialog" aria-labelledby="modalCreatePinScan" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document" >
+      <div class="modal-content modal-view"  style="border:0; border-radius:0px;">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalCenterTitle"><i class="fa fa-thumb-tack" style="transform: rotate(-45deg);" ></i>&nbsp; Create Pin for {{ displayComponentSelected | titlecase }}</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+          <div class="modal-body" style="text-align:center;">
+
+            <div *ngIf="!isScanningLogbook">
+              <input class="inputfile" type="file" capture="camera" accept="image/*" id="cameraInput" name="cameraInput" (change)="fileChangeEvent($event)">
+              <label for="cameraInput" style="padding:15px; font-size:15px">
+
+                <i class="fa fa-camera"></i>&nbsp;
+                Capture Logbook Page
+
+              </label>
+            </div>
+
+            <div *ngIf="isScanningLogbook">
+              <div class="spinner-border text-warning" role="status" style="margin-bottom:1em;"></div>
+              <h6>Scanning...</h6>
+            </div>
+
+          </div>
+
+      </div>
+  </div>
+</div>
+
+
+<!-- Modal for ComponentPinBoard -->
+<div class="modal fade" id="modalComponentPinboard" tabindex="-1" role="dialog" aria-labelledby="modalComponentPinboard" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document" >
+      <div class="modal-content modal-view"  style="border:0; border-radius:0px; width:30em; height:23em;">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalCenterTitle"><i class="fa fas fa-th"></i> &nbsp; Pins for {{ displayComponentSelected | titlecase }}</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div *ngIf="this.pinsForComponent" class="modal-body" style="overflow-y:auto;">
+          <div *ngFor="let pin of this.pinsForComponent" class="card card-pin">
+            <div class="card-body" style="border:1px; border-color:rgba(0,0,0,0.2); text-align:center; ">
+              <div class="row">
+                <div class="col-6">
+                  <h6 class="card-title" style="font-size:12px;"><i class="fa fa-thumb-tack" style="transform: rotate(-45deg);" [style.color]="pin.severity"></i> {{ pin.id }}</h6>
+                  <p style="font-size:12px;">{{pin.title}} on {{pin.component | titlecase}}</p>
+                  <p style="font-size:12px;">Description: {{pin.content}}</p>
+                  <p style="font-size:12px;">Actions Taken: {{pin.actions}}</p>
+                  <p style="font-size:10px">{{pin.datetime}}</p>
+                  <p style="font-size:12px;"><i class="fa fa-user-circle"></i> {{pin.user}}</p>
+                </div>
+                <div class="col-6" style="font-size:10px">
+                    <label>Inventory Expended</label>
+                    <div >
+                      <table class="table borderless">
+                      <tr *ngFor="let item_used of pin.items_used | keyvalue">
+                      <td style="padding-top:3px; padding-bottom:3px;">{{ item_used.key }}</td> <td style="padding-top:3px; padding-bottom:3px;">{{ item_used.value }}</td>
+                      </tr>
+                      </table>
+                    </div>
+                </div>
+              </div>
+            </div>
+        </div>
+        <div *ngIf="this.pinsForComponent && this.pinsForComponent.length == 0" class="modal-body" style="text-align:center">
+          <h6 style="margin-bottom:20px">Nothing is pinned yet for {{ displayComponentSelected | titlecase }}!</h6>
+        </div>
+    </div>
+  </div>
+</div>
+</div>
+
+
+
+<!-- Modal for View Inventory -->
+<div class="modal fade" id="modalViewInventory" tabindex="-1" role="dialog" aria-labelledby="modalViewInventory" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document" >
+      <div class="modal-content modal-view"  style="border:0; border-radius:0px; width:40em; height:26em;">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalCenterTitle"><i class="fa fas fa-archive"></i> &nbsp; Inventory for {{ displayComponentSelected | titlecase }}</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body" style="overflow-y:auto; margin:20px">
+            <table class="table table-border" *ngIf="this._inventoryService.inventorySelectedByComponent" style="font-size:12px">
+            <tr>
+              <th>Item</th><th>Quantity</th>
+            </tr>
+            <tr *ngFor="let itemgroup of this._inventoryService.inventorySelectedByComponent | keyvalue">
+              <td>{{ itemgroup.key }}</td><td>{{ itemgroup.value }}</td>
+            </tr>
+            </table>
+        </div>
+    </div>
+  </div>
+</div>
+</div>

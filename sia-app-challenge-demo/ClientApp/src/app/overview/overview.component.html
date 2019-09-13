@@ -1,0 +1,102 @@
+
+<div id="glFullscreen" style="width:80%; height:100%;">
+
+  <div class="animate animated fadeIn fast" style="padding:20px">
+
+          <div class="card" style="border:0; margin-top:1.5em">
+              <div class="card-header" data-toggle="collapse" data-target="#admincard" aria-expanded="false" aria-controls="admincard">
+                <h5><i class="fa fa-user-circle"></i> &nbsp; Plane Administrators</h5>
+              </div>
+              <div id="admincard" class="card-body collapse" style="padding-top:0">
+                <div class="card-body nice-scroll" style="height:auto; margin-top:0px">
+
+                  <div class="row">
+                    <p class="col-2"><i class="fa fa-user-circle"></i>&nbsp; Wayne</p>
+                    <p class="col-2"><i class="fa fa-user-circle"></i>&nbsp; Shao Tang</p>
+                    <p class="col-2"><i class="fa fa-user-circle"></i>&nbsp; Jia Sheng</p>
+                    <p class="col-2"><i class="fa fa-user-circle"></i>&nbsp; Timofey</p>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+
+
+
+          <div class="card" style="border:0; margin-top:1.5em">
+              <div class="card-header" data-toggle="collapse" data-target="#countcard" aria-expanded="false" aria-controls="countcard">
+                <h5><i class="fa fas fa-th"></i> &nbsp; Board Summary</h5>
+              </div>
+              <div id="countcard" class="card-body collapse" style="padding-top:0">
+                <div class="card-body nice-scroll" style="height:10em; margin-top:0px">
+                  <div class="row">
+
+                    <div class="col-3">
+                      <div class="card" style="border-radius:0px; background-color:rgba(0,0,0,0.1); box-shadow:none">
+                        <div class="card-body" style="text-align:center">
+                          <h1><strong>3</strong></h1>
+                          <h6>Line Check Boards</h6>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="col-3">
+                      <div class="card" style="border-radius:0px; background-color:rgba(0,0,0,0.1) ; box-shadow:none">
+                        <div class="card-body" style="text-align:center">
+                          <h1><strong>1</strong></h1>
+                          <h6>A Check Boards</h6>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="col-3">
+                      <div class="card" style="border-radius:0px; background-color:rgba(0,0,0,0.1); box-shadow:none">
+                        <div class="card-body" style="text-align:center">
+                          <h1><strong>1</strong></h1>
+                          <h6>C Check Boards</h6>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="col-3">
+                      <div class="card" style="border-radius:0px; background-color:rgba(0,0,0,0.1); box-shadow:none">
+                        <div class="card-body" style="text-align:center">
+                          <h1><strong>1</strong></h1>
+                          <h6>D Check Boards</h6>
+                        </div>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+          </div>
+
+
+        <div class="card" style="border:0; margin-top:1.5em">
+          <div class="card-header" data-toggle="collapse" data-target="#pincard" aria-expanded="false" aria-controls="pincard">
+            <h5><i class="fa fas fa-thumb-tack"></i> &nbsp;&nbsp;&nbsp; Recent Pins</h5>
+          </div>
+          <div id="pincard" class="card-body collapse" style="padding-top:0">
+            <div class="card-body nice-scroll" style="height:15em; overflow-y:scroll; margin-top:0px">
+              <table class="table" style="color:#fff; font-size:12px">
+                <thead>
+                  <tr><th>Severity</th><th>ID</th><th>Date Pinned</th><th>Part</th><th>Component</th><th>User</th></tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let pin of this._pinboardService.pins | slice:0:5; let i=index ">
+                    <td><i class="fa fa-thumb-tack" style="transform: rotate(-45deg);" [style.color]="pin.severity"></i></td>
+                    <td>{{ pin.id }}</td>
+                    <td>{{ pin.datetime }}</td>
+                    <td>{{ pin.part | titlecase }}</td>
+                    <td>{{ pin.title }} on {{ pin.component | titlecase }}</td>
+                    <td><i class="fa fa-user-circle"></i> {{ pin.user }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
